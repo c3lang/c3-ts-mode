@@ -23,7 +23,7 @@
 
 ;;; Commentary:
 
-;; This major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
+;; This tree-sitter powered Emacs >= 29 major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
 ;; It's built against the tree-sitter grammar located at https://github.com/c3lang/tree-sitter-c3.
 
 ;;; Code:
@@ -258,7 +258,7 @@
 (defvar c3-ts-mode--feature-list
   '((comment definition)
     (keyword string type)
-    ;; TODO Not clear if function and/or assignment should go in level 4 or not. 3 is the default level, and by default it should highlight these categories.
+    ;; TODO Not clear if assignment should go in level 4 or not (3 is the default level).
     (builtin attribute escape-sequence literal constant function assignment)
     (bracket operator type-property)
     ;; (error) ;; Disabled by default
@@ -322,9 +322,9 @@
    '((type_ident) @font-lock-type-face
      (ct_type_ident) @font-lock-type-face
      (base_type_name) @font-lock-type-face
-     (type_suffix ["[" "[<"]) @font-lock-type-face ;; This excludes the asterisk
-     ;; NOTE This is not enabled by default since some people prefer asterisk placement next to the identifier
-     ;; (type_suffix) @font-lock-type-face
+
+     ;; TODO Probably don't want these
+     ;; (type_suffix ["[" "[<" ">]" "]"] @font-lock-type-face)
      ;; (optional_type "!" @font-lock-type-face)
      )
 
@@ -437,6 +437,7 @@
      ((match "expr_block" "assignment_expr" "right" nil nil) parent-bol 0)
 
      ((match nil "field_expr" "field" nil nil) parent-bol c3-ts-mode-indent-offset)
+     ((n-p-gp "." "field_expr" nil) parent-bol c3-ts-mode-indent-offset) ;; Field access beginning with "."
      ((match nil "type_access_expr" "field" nil nil) parent-bol c3-ts-mode-indent-offset)
      ((match nil "assignment_expr" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
      ((match nil "const_declaration" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
@@ -482,8 +483,6 @@
      ((parent-is "macro_header") standalone-parent 0)
 
      ((node-is "initializer_list") parent 0)
-     ;; Field access beginning with "."
-     ((n-p-gp "." "field_expr" nil) parent c3-ts-mode-indent-offset)
 
      ;; ((parent-is "ERROR") no-indent 0)
      )))
