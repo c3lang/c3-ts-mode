@@ -267,7 +267,7 @@
     ;; ">)"
     ;; ">]"
     "??"
-    "::"
+    ;; "::"
     "<<"
     ">>"
     "..."
@@ -281,7 +281,7 @@
     ,(append
       '(builtin attribute escape-sequence literal constant module function)
       (when c3-ts-mode-highlight-assignment '(assignment)))
-    (bracket operator type-property)
+    (type-property operator bracket punctuation)
     ;; (error) ;; Disabled by default
     )
   "`treesit-font-lock-feature-list' for `c3-ts-mode'.")
@@ -393,6 +393,10 @@
    :language 'c3
    :feature 'bracket
    '((["(" ")" "[" "]" "{" "}" "(<" ">)" "[<" ">]" "{|" "|}"]) @font-lock-bracket-face)
+
+   :language 'c3
+   :feature 'punctuation
+   '(([";" "," "::"]) @font-lock-punctuation-face)
 
    :language 'c3
    :feature 'error
