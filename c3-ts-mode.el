@@ -331,7 +331,7 @@
      ["true" "false" "null"] @font-lock-constant-face
      (module_resolution (ident) ,c3-ts-mode-module-path-face)
      (module (path_ident (ident) ,c3-ts-mode-module-path-face))
-     (import_declaration (path_ident (ident) @font-lock-constant-face)))
+     (import_declaration (path_ident (ident) ,c3-ts-mode-module-path-face)))
 
    :language 'c3
    :feature 'attribute
