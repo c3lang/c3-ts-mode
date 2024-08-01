@@ -279,7 +279,7 @@
     (keyword string type)
     ;; TODO Not clear if assignment should go in level 4 or not (3 is the default level).
     ,(append
-      '(builtin attribute escape-sequence literal constant function)
+      '(builtin attribute escape-sequence literal constant module function)
       (when c3-ts-mode-highlight-assignment '(assignment)))
     (bracket operator type-property)
     ;; (error) ;; Disabled by default
@@ -326,10 +326,13 @@
 
    :language 'c3
    :feature 'constant
-   `((const_ident) @font-lock-constant-face
+   '((const_ident) @font-lock-constant-face
      ;; (ct_ident) @font-lock-constant-face ;; TODO debatable
-     ["true" "false" "null"] @font-lock-constant-face
-     (module_resolution (ident) ,c3-ts-mode-module-path-face)
+     ["true" "false" "null"] @font-lock-constant-face)
+
+   :language 'c3
+   :feature 'module
+   `((module_resolution (ident) ,c3-ts-mode-module-path-face)
      (module (path_ident (ident) ,c3-ts-mode-module-path-face))
      (import_declaration (path_ident (ident) ,c3-ts-mode-module-path-face)))
 
@@ -490,12 +493,11 @@
 
      ((parent-is "paren") parent 1)
      ((parent-is "binary") parent 0)
-     ((parent-is "ternary") parent 0)
-     ((parent-is "elvis_orelse") parent 0)
-     ((parent-is "unary") parent 0)
-     ((parent-is "subscript") parent 0)
-     ((parent-is "update") parent 0)
      ((parent-is "range") parent 0)
+     ((parent-is "ternary") parent c3-ts-mode-indent-offset)
+     ((parent-is "elvis_orelse") parent c3-ts-mode-indent-offset)
+     ((parent-is "subscript") parent c3-ts-mode-indent-offset)
+     ((parent-is "update") parent c3-ts-mode-indent-offset)
      ((parent-is "call") parent c3-ts-mode-indent-offset)
      ((parent-is "cast") parent c3-ts-mode-indent-offset)
 
