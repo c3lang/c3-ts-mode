@@ -1,6 +1,6 @@
 # c3-ts-mode
 This tree-sitter powered Emacs >= 29 major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
-It's built against the tree-sitter grammar located at [<https://github.com/c3lang/tree-sitter-c3>](https://github.com/c3lang/tree-sitter-c3).
+It's built against the tree-sitter grammar located at <https://github.com/c3lang/tree-sitter-c3>.
 
 ## Installing
 
@@ -43,9 +43,20 @@ To enable all highlighting features, you might want to set `treesit-font-lock-le
 (setq treesit-font-lock-level 4)
 ```
 
+Override the face for module paths. The face name must be prefixed with `@`:
+```elisp
+(setq c3-ts-mode-module-path-face '@font-lock-some-face-here)
+```
+
+Override the face for assignments (see [Notes](#notes)). The face name must be prefixed with `@`:
+```elisp
+(setq c3-ts-mode-assignment-face '@font-lock-some-face-here)
+```
+
 ## Notes
 - A special feature is that assignments (and updates via `++`/`--`) are highlighted accurately.
   - If a variable or field is assigned, the variable name is highlighted.
   - If a pointer dereference is assigned, the asterisk is highlighted.
   - If an array index is assigned, the subscript brackets are highlighted (won't be visible with rainbow-delimiters though).
+  - You can configure this feature using `c3-ts-mode-enable-assignment` and `c3-ts-mode-assignment-face`.
 - Indentation is tricky and has a bunch of edge cases - please submit an issue if you find a case where it doesn't work as expected.

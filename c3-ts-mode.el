@@ -50,6 +50,25 @@
   :safe 'integerp
   :group 'c3-ts)
 
+(defcustom c3-ts-mode-highlight-assignment 't
+  "Enable highlighting of assignments in `c3-ts-mode'."
+  :version "29.1"
+  :type 'boolean
+  :safe 'booleanp
+  :group 'c3-ts)
+
+(defcustom c3-ts-mode-module-path-face '@font-lock-constant-face
+  "The face to use for highlighting module paths in `c3-ts-mode'."
+  :version "29.1"
+  :type 'symbol
+  :group 'c3-ts)
+
+(defcustom c3-ts-mode-assignment-face '@font-lock-variable-name-face
+  "The face to use for highlighting assignments in `c3-ts-mode'."
+  :version "29.1"
+  :type 'symbol
+  :group 'c3-ts)
+
 (defcustom c3-ts-mode-hook nil
   "Hook run after entering `c3-ts-mode'."
   :version "29.1"
@@ -256,10 +275,12 @@
     ">>="))
 
 (defvar c3-ts-mode--feature-list
-  '((comment definition)
+  `((comment definition)
     (keyword string type)
     ;; TODO Not clear if assignment should go in level 4 or not (3 is the default level).
-    (builtin attribute escape-sequence literal constant function assignment)
+    ,(append
+      '(builtin attribute escape-sequence literal constant function)
+      (when c3-ts-mode-highlight-assignment '(assignment)))
     (bracket operator type-property)
     ;; (error) ;; Disabled by default
     )
@@ -305,10 +326,11 @@
 
    :language 'c3
    :feature 'constant
-   '((const_ident) @font-lock-constant-face
+   `((const_ident) @font-lock-constant-face
+     ;; (ct_ident) @font-lock-constant-face ;; TODO debatable
      ["true" "false" "null"] @font-lock-constant-face
-     (module_resolution (ident) @font-lock-constant-face)
-     (module (path_ident (ident) @font-lock-constant-face))
+     (module_resolution (ident) ,c3-ts-mode-module-path-face)
+     (module (path_ident (ident) ,c3-ts-mode-module-path-face))
      (import_declaration (path_ident (ident) @font-lock-constant-face)))
 
    :language 'c3
@@ -344,22 +366,22 @@
 
    :language 'c3
    :feature 'assignment
-   '((assignment_expr left: (ident) @font-lock-variable-name-face)
-     (assignment_expr left: (module_ident_expr (ident) @font-lock-variable-name-face))
-     (assignment_expr left: (field_expr field: (_) @font-lock-variable-name-face))
-     (assignment_expr left: (unary_expr operator: "*" @font-lock-variable-name-face))
-     (assignment_expr left: (subscript_expr ["[" "]"] @font-lock-variable-name-face))
+   `((assignment_expr left: (ident) ,c3-ts-mode-assignment-face)
+     (assignment_expr left: (module_ident_expr (ident) ,c3-ts-mode-assignment-face))
+     (assignment_expr left: (field_expr field: (_) ,c3-ts-mode-assignment-face))
+     (assignment_expr left: (unary_expr operator: "*" ,c3-ts-mode-assignment-face))
+     (assignment_expr left: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face))
 
-     (update_expr argument: (ident) @font-lock-variable-name-face)
-     (update_expr argument: (module_ident_expr ident: (ident) @font-lock-variable-name-face))
-     (update_expr argument: (field_expr field: (_) @font-lock-variable-name-face))
-     (update_expr argument: (unary_expr operator: "*" @font-lock-variable-name-face))
-     (update_expr argument: (subscript_expr ["[" "]"] @font-lock-variable-name-face))
+     (update_expr argument: (ident) ,c3-ts-mode-assignment-face)
+     (update_expr argument: (module_ident_expr ident: (ident) ,c3-ts-mode-assignment-face))
+     (update_expr argument: (field_expr field: (_) ,c3-ts-mode-assignment-face))
+     (update_expr argument: (unary_expr operator: "*" ,c3-ts-mode-assignment-face))
+     (update_expr argument: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face))
 
-     (unary_expr operator: ["--" "++"] argument: (ident) @font-lock-variable-name-face)
-     (unary_expr operator: ["--" "++"] argument: (module_ident_expr (ident) @font-lock-variable-name-face))
-     (unary_expr operator: ["--" "++"] argument: (field_expr field: (access_ident (ident)) @font-lock-variable-name-face))
-     (unary_expr operator: ["--" "++"] argument: (subscript_expr ["[" "]"] @font-lock-variable-name-face)))
+     (unary_expr operator: ["--" "++"] argument: (ident) ,c3-ts-mode-assignment-face)
+     (unary_expr operator: ["--" "++"] argument: (module_ident_expr (ident) ,c3-ts-mode-assignment-face))
+     (unary_expr operator: ["--" "++"] argument: (field_expr field: (access_ident (ident)) ,c3-ts-mode-assignment-face))
+     (unary_expr operator: ["--" "++"] argument: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face)))
 
    :language 'c3
    :feature 'operator
