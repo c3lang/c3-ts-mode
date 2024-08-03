@@ -1,5 +1,5 @@
 # c3-ts-mode
-This tree-sitter powered Emacs >= 29 major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
+This tree-sitter powered Emacs 29+ major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
 It's built against the tree-sitter grammar located at <https://github.com/c3lang/tree-sitter-c3>.
 
 ⚠️ Active development. **If you're updating, please do `M-x treesit-install-language-grammar RET c3 RET` to update the tree-sitter grammar too.**
