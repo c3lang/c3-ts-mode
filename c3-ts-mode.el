@@ -50,8 +50,22 @@
   :safe 'integerp
   :group 'c3-ts)
 
+(defcustom c3-ts-mode-highlight-variable 't
+  "Enable highlighting of variables in `c3-ts-mode'."
+  :version "29.1"
+  :type 'boolean
+  :safe 'booleanp
+  :group 'c3-ts)
+
 (defcustom c3-ts-mode-highlight-assignment 't
   "Enable highlighting of assignments in `c3-ts-mode'."
+  :version "29.1"
+  :type 'boolean
+  :safe 'booleanp
+  :group 'c3-ts)
+
+(defcustom c3-ts-mode-highlight-punctuation 't
+  "Enable highlighting of punctuation in `c3-ts-mode'."
   :version "29.1"
   :type 'boolean
   :safe 'booleanp
@@ -208,7 +222,9 @@
     "qnameof"
     "returns"
     "sizeof"
-    "values"))
+    "values"
+    ;; Extra token in grammar
+    "typeid"))
 
 
 (defvar c3-ts-mode--operators
@@ -281,7 +297,10 @@
     ,(append
       '(builtin attribute escape-sequence literal constant module function)
       (when c3-ts-mode-highlight-assignment '(assignment)))
-    (type-property operator bracket punctuation)
+    ,(append
+      '(type-property operator bracket)
+      (when c3-ts-mode-highlight-punctuation '(punctuation))
+      (when c3-ts-mode-highlight-variable '(variable)))
     ;; (error) ;; Disabled by default
     )
   "`treesit-font-lock-feature-list' for `c3-ts-mode'.")
@@ -322,7 +341,7 @@
 
    :language 'c3
    :feature 'type-property
-   `((type_access_expr (access_ident (ident) @font-lock-constant-face (:match ,(rx-to-string `(: bos (or ,@c3-ts-mode--type-properties) eos)) @font-lock-constant-face))))
+   `((type_access_expr (access_ident [(ident) "typeid"] @font-lock-constant-face (:match ,(rx-to-string `(: bos (or ,@c3-ts-mode--type-properties) eos)) @font-lock-constant-face))))
 
    :language 'c3
    :feature 'constant
@@ -350,7 +369,7 @@
 
      ;; TODO Probably don't want these
      ;; (type_suffix ["[" "[<" ">]" "]"] @font-lock-type-face)
-     ;; (optional_type "!" @font-lock-type-face)
+     ;; (type "!" @font-lock-type-face :anchor)
      )
 
    :language 'c3
@@ -389,6 +408,19 @@
    :language 'c3
    :feature 'operator
    `(([,@c3-ts-mode--operators]) @font-lock-operator-face)
+
+   :language 'c3
+   :feature 'variable
+   '([(ident) (ct_ident)] @font-lock-variable-use-face
+     ;; Parameter
+     (parameter name: (_) @font-lock-variable-name-face)
+     (call_invocation (arg (param_path (param_path_element [(ident) (ct_ident)] @font-lock-variable-name-face))))
+     ;; Declaration
+     (global_declaration (ident) @font-lock-variable-name-face)
+     (local_decl_after_type name: [(ident) (ct_ident)] @font-lock-variable-name-face)
+     (var_decl name: [(ident) (ct_ident)] @font-lock-variable-name-face)
+     (try_unwrap (ident) @font-lock-variable-name-face)
+     (catch_unwrap (ident) @font-lock-variable-name-face))
 
    :language 'c3
    :feature 'bracket
@@ -498,8 +530,8 @@
      ((parent-is "paren") parent 1)
      ((parent-is "binary") parent 0)
      ((parent-is "range") parent 0)
+     ((parent-is "elvis_orelse") parent 0)
      ((parent-is "ternary") parent c3-ts-mode-indent-offset)
-     ((parent-is "elvis_orelse") parent c3-ts-mode-indent-offset)
      ((parent-is "subscript") parent c3-ts-mode-indent-offset)
      ((parent-is "update") parent c3-ts-mode-indent-offset)
      ((parent-is "call") parent c3-ts-mode-indent-offset)
