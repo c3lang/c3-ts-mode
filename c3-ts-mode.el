@@ -57,6 +57,13 @@
   :safe 'booleanp
   :group 'c3-ts)
 
+(defcustom c3-ts-mode-highlight-property 't
+  "Enable highlighting of members in `c3-ts-mode'."
+  :version "29.1"
+  :type 'boolean
+  :safe 'booleanp
+  :group 'c3-ts)
+
 (defcustom c3-ts-mode-highlight-assignment 't
   "Enable highlighting of assignments in `c3-ts-mode'."
   :version "29.1"
@@ -300,7 +307,8 @@
     ,(append
       '(type-property operator bracket)
       (when c3-ts-mode-highlight-punctuation '(punctuation))
-      (when c3-ts-mode-highlight-variable '(variable)))
+      (when c3-ts-mode-highlight-variable '(variable))
+      (when c3-ts-mode-highlight-property '(property)))
     ;; (error) ;; Disabled by default
     )
   "`treesit-font-lock-feature-list' for `c3-ts-mode'.")
@@ -408,6 +416,15 @@
    :language 'c3
    :feature 'operator
    `(([,@c3-ts-mode--operators]) @font-lock-operator-face)
+
+   :language 'c3
+   :feature 'property
+   '(;; Member
+     (field_expr field: (access_ident (ident) @font-lock-property-use-face))
+     (struct_member_declaration (ident) @font-lock-property-name-face)
+     (struct_member_declaration (identifier_list (ident) @font-lock-property-name-face))
+     (bitstruct_member_declaration (ident) @font-lock-property-name-face)
+     (initializer_list (arg (param_path (param_path_element (ident) @font-lock-property-name-face)))))
 
    :language 'c3
    :feature 'variable

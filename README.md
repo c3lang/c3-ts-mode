@@ -59,6 +59,8 @@ Further options:
 ```elisp
 ;; Disable highlighting of variables
 (setq c3-ts-mode-highlight-variable nil)
+;; Disable highlighting of members
+(setq c3-ts-mode-highlight-property nil)
 ;; Disable highlighting of punctuation
 (setq c3-ts-mode-highlight-punctuation nil)
 ;; Disable highlighting of assignments
