@@ -303,7 +303,7 @@
     (keyword string type)
     ;; TODO Not clear if assignment should go in level 4 or not (3 is the default level).
     ,(append
-      '(builtin attribute escape-sequence literal constant module function)
+      '(builtin attribute escape-sequence literal constant assembly module function)
       (when c3-ts-mode-highlight-assignment '(assignment)))
     ,(append
       '(type-property operator bracket)
@@ -355,8 +355,12 @@
    :language 'c3
    :feature 'constant
    '((const_ident) @font-lock-constant-face
-     ;; (ct_ident) @font-lock-constant-face ;; TODO debatable
      ["true" "false" "null"] @font-lock-constant-face)
+
+   :language 'c3
+   :feature 'assembly
+   '((asm_instr [(ident) "int"] @font-lock-function-call-face)
+     (asm_expr [(ct_ident) (ct_const_ident)] @font-lock-variable-use-face))
 
    :language 'c3
    :feature 'module
