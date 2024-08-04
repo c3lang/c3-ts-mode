@@ -391,7 +391,7 @@
    '((call_expr function: [(ident) (at_ident)] @font-lock-function-call-face)
      (call_expr function: (module_ident_expr ident: (_) @font-lock-function-call-face))
      (call_expr function: (trailing_generic_expr argument: (module_ident_expr ident: (_) @font-lock-function-call-face)))
-     (call_expr function: (field_expr field: (_) @font-lock-function-call-face))
+     (call_expr function: (field_expr field: (access_ident [(ident) (at_ident)] @font-lock-function-call-face))) ; NOTE Ambiguous, could be calling a method or function pointer
      ;; Method on type
      (call_expr function: (type_access_expr field: (access_ident [(ident) (at_ident)] @font-lock-function-call-face))))
 
@@ -433,6 +433,7 @@
      ;; Parameter
      (parameter name: (_) @font-lock-variable-name-face)
      (call_invocation (arg (param_path (param_path_element [(ident) (ct_ident)] @font-lock-variable-name-face))))
+     (enum_param_declaration (ident) @font-lock-variable-name-face)
      ;; Declaration
      (global_declaration (ident) @font-lock-variable-name-face)
      (local_decl_after_type name: [(ident) (ct_ident)] @font-lock-variable-name-face)
