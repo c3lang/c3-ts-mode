@@ -67,6 +67,29 @@ Further options:
 (setq c3-ts-mode-highlight-assignment nil)
 ```
 
+## Adding custom highlighting patterns
+
+Here is an example how to override highlighting of the "assert" keyword:
+```elisp
+(defun add-custom-c3-ts-rules ()
+  (add-to-list 'treesit-font-lock-settings
+               (car (treesit-font-lock-rules
+                     :language 'c3
+                     ;; Choose a feature name here (see docs for 'treesit-font-lock-rules')
+                     :feature 'custom
+                     ;; Use 't' to override the face, 'append'/'prepend' to append/prepend to existing ones
+                     :override t
+                     ;; This will highlight the "assert" keyword with a custom 'assert-face'
+                     ;; See "37.5 Pattern Matching Tree-sitter Nodes" in the Emacs manual
+                     '((assert_stmt "assert" @assert-face))
+                     )) t)
+
+  ;; Add feature 'custom' to feature level 4
+  (push 'custom (nth 3 treesit-font-lock-feature-list)))
+
+(add-hook 'c3-ts-mode-hook #'add-custom-c3-ts-rules)
+```
+
 ## Notes
 - A special feature is that assignments (and updates via `++`/`--`) are highlighted accurately.
   - If a variable or field is assigned, the variable name is highlighted.
