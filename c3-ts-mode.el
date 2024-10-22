@@ -23,8 +23,8 @@
 
 ;;; Commentary:
 
-;; This tree-sitter powered Emacs >= 29 major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
-;; It's built against the tree-sitter grammar located at https://github.com/c3lang/tree-sitter-c3.
+;; This tree-sitter powered Emacs 29+ major mode provides syntax highlighting, indentation, imenu and which-function support for C3.
+;; It's built against the tree-sitter grammar located at <https://github.com/c3lang/tree-sitter-c3>.
 
 ;;; Code:
 
@@ -436,7 +436,7 @@
    '([(ident) (ct_ident)] @font-lock-variable-use-face
      ;; Parameter
      (parameter name: (_) @font-lock-variable-name-face)
-     (call_invocation (arg (param_path (param_path_element [(ident) (ct_ident)] @font-lock-variable-name-face))))
+     (call_invocation (call_arg name: (_) @font-lock-variable-name-face))
      (enum_param_declaration (ident) @font-lock-variable-name-face)
      ;; Declaration
      (global_declaration (ident) @font-lock-variable-name-face)
@@ -539,9 +539,9 @@
      ((parent-is "comma_decl_or_expr") parent 0)
 
      ;; First parameter/argument
-     ((match "^arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 1 1) parent-bol c3-ts-mode-indent-offset)
+     ((match "^\\(call_\\)?arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 1 1) parent-bol c3-ts-mode-indent-offset)
      ;; Subsequent parameters/arguments
-     ((match "^arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 2 nil) (nth-sibling 1) 0)
+     ((match "^\\(call_\\)?arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 2 nil) (nth-sibling 1) 0)
 
      ;; String/bytes literals
      ((node-is "raw_string_literal") no-indent)

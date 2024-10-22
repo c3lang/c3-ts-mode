@@ -70,7 +70,7 @@ Further options:
 
 ## Adding custom highlighting patterns
 
-Here is an example how to override highlighting of the "assert" keyword:
+Here is an example how to override highlighting of the "assert" keyword and argument names:
 ```elisp
 (defun add-custom-c3-ts-rules ()
   (add-to-list 'treesit-font-lock-settings
@@ -80,9 +80,10 @@ Here is an example how to override highlighting of the "assert" keyword:
                      :feature 'custom
                      ;; Use 't' to override the face, 'append'/'prepend' to append/prepend to existing ones
                      :override t
-                     ;; This will highlight the "assert" keyword with a custom 'assert-face'
+                     ;; This will highlight the "assert" keyword and argument names with custom faces
                      ;; See "37.5 Pattern Matching Tree-sitter Nodes" in the Emacs manual
-                     '((assert_stmt "assert" @assert-face))
+                     '((assert_stmt "assert" @assert-face)
+                       (call_invocation (call_arg name: (_) @named-arg-face)))
                      )) t)
 
   ;; Add feature 'custom' to feature level 4
