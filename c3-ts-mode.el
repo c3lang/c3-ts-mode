@@ -609,16 +609,16 @@
     ;; Navigation
     (setq-local treesit-defun-name-function #'c3-ts-mode--defun-name)
     (setq-local treesit-defun-type-regexp
-                `(,(rx bos
-                       (or "struct_declaration"
-                           "union_declaration"
-                           "bitstruct_declaration"
-                           "enum_declaration"
-                           "fault_declaration"
-                           "interface_declaration"
-                           "func_definition"
-                           "macro_declaration")
-                       eos)))
+                (rx bos
+                    (or "struct_declaration"
+                        "union_declaration"
+                        "bitstruct_declaration"
+                        "enum_declaration"
+                        "fault_declaration"
+                        "interface_declaration"
+                        "func_definition"
+                        "macro_declaration")
+                    eos))
 
     ;; Imenu
     (setq-local treesit-simple-imenu-settings
