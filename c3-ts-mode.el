@@ -30,6 +30,7 @@
 
 (require 'treesit)
 (require 'c-ts-common)
+(require 'compile)
 
 (eval-when-compile (require 'rx))
 
@@ -657,6 +658,14 @@
   (add-to-list 'auto-mode-alist '("\\.c3\\'" . c3-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.c3i\\'" . c3-ts-mode))
   (add-to-list 'auto-mode-alist '("\\.c3t\\'" . c3-ts-mode)))
+
+(eval-after-load 'compile
+  (lambda()
+    (add-to-list 'compilation-error-regexp-alist-alist
+                 '(c3
+                   "^(\\([^:]*\\):\\([0-9]+\\):\\([0-9]+\\)) \\(Warning\\)?.*$"
+                   1 2 3 (4)))
+    (add-to-list 'compilation-error-regexp-alist 'c3)))
 
 (provide 'c3-ts-mode)
 
