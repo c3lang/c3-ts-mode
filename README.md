@@ -98,5 +98,5 @@ Here is an example how to override highlighting of the "assert" keyword and argu
   - If a pointer dereference is assigned, the asterisk is highlighted.
   - If an array element is assigned, the subscript brackets are highlighted.
   - You can configure this feature using `c3-ts-mode-highlight-assignment` and `c3-ts-mode-assignment-face`.
-- If punctuation is enabled (`treesit-font-lock-level` is `4` and `c3-ts-mode-highlight-punctuation` is `'t`), make sure both `font-lock-punctuation-face` and `font-lock-brackets-face` is defined in your theme.
+- If punctuation is enabled (`treesit-font-lock-level` is `4` and `c3-ts-mode-highlight-punctuation` is `t`), make sure both `font-lock-punctuation-face` and `font-lock-brackets-face` is defined in your theme.
 - Indentation is tricky and has a bunch of edge cases - please submit an issue if you find a case where it doesn't work as expected.

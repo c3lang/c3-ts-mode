@@ -303,7 +303,7 @@
     (keyword string type)
     ;; TODO Not clear if assignment should go in level 4 or not (3 is the default level).
     ,(append
-      '(builtin attribute escape-sequence literal constant assembly module function)
+      '(builtin attribute escape-sequence literal constant assembly module function doc-comment)
       (when c3-ts-mode-highlight-assignment '(assignment)))
     ,(append
       '(type-property operator bracket)
@@ -322,6 +322,22 @@
    '((line_comment) @font-lock-comment-face
      (block_comment) @font-lock-comment-face
      (doc_comment) @font-lock-doc-face)
+
+   :language 'c3
+   :feature 'doc-comment
+   :override 'append
+   `((doc_comment_contract (at_ident) @bold
+      (:match ,(rx
+                bos
+                "@"
+                (or
+                 "param"
+                 "return"
+                 "deprecated"
+                 "require"
+                 "ensure"
+                 "pure")
+                eos) @bold)))
 
    :language 'c3
    :feature 'literal
@@ -473,10 +489,11 @@
 
      ((and (parent-is "block_comment_text") c-ts-common-looking-at-star)
       c-ts-common-comment-start-after-first-star -1)
-     ((and (parent-is "doc_comment_text") c-ts-common-looking-at-star)
-      c-ts-common-comment-start-after-first-star -2)
-     (c-ts-common-comment-2nd-line-matcher
-      c-ts-common-comment-2nd-line-anchor 1)
+
+     ;; NOTE This only indents the first line of a doc comment text. This way we preserve identation on subsequent lines, such as list item indentation. TODO Indent to a minimum of 1? Can still ruin formatting
+     ((node-is "doc_comment_text") parent-bol 1)
+     ((node-is "doc_comment_contract") parent-bol 1)
+     ((node-is "*>") parent-bol 0)
 
      ((node-is "}") standalone-parent 0)
      ((node-is ")") standalone-parent 0)
