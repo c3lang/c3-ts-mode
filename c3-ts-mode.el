@@ -122,24 +122,24 @@
 
 (defvar c3-ts-mode--keywords
   ;; From "c3c --list-keywords", without base types
-  '("assert"
+  '("alias"
+    "assert"
     "asm"
+    "attrdef"
     "bitstruct"
     "break"
     "case"
     "catch"
     "const"
     "continue"
-    "def"
     "default"
     "defer"
-    "distinct"
     "do"
     "else"
     "enum"
     "extern"
     ;; "false" ;; NOTE Treated as constant
-    "fault"
+    "faultdef"
     "for"
     "foreach"
     "foreach_r"
@@ -159,17 +159,15 @@
     "switch"
     ;; "true" ;; NOTE Treated as constant
     "try"
+    "typedef"
     "union"
     "var"
     "while"
 
     "$alignof"
-    "$and"
-    "$append"
     "$assert"
     "$assignable"
     "$case"
-    "$concat"
     "$default"
     "$defined"
     "$echo"
@@ -192,7 +190,6 @@
     "$is_const"
     "$nameof"
     "$offsetof"
-    "$or"
     "$qnameof"
     "$sizeof"
     "$stringify"
@@ -202,7 +199,6 @@
     "$vacount"
     "$vatype"
     "$vaconst"
-    "$varef"
     "$vaarg"
     "$vaexpr"
     "$vasplat"))
@@ -277,8 +273,6 @@
     ">="
     "=>"
     "<="
-    ;; "{|"
-    ;; "(<"
     ;; "[<"
     "-="
     "--"
@@ -288,8 +282,6 @@
     "||"
     "+="
     "++"
-    ;; "|}"
-    ;; ">)"
     ;; ">]"
     "??"
     ;; "::"
@@ -388,7 +380,7 @@
    :language 'c3
    :feature 'attribute
    '((attribute name: (_) @font-lock-builtin-face)
-     (define_attribute name: (_) @font-lock-builtin-face)
+     (attrdef_declaration name: (_) @font-lock-builtin-face)
      (call_inline_attributes (at_ident) @font-lock-builtin-face))
 
    :language 'c3
@@ -464,7 +456,7 @@
 
    :language 'c3
    :feature 'bracket
-   '((["(" ")" "[" "]" "{" "}" "(<" ">)" "[<" ">]" "{|" "|}"]) @font-lock-bracket-face)
+   '((["(" ")" "[" "]" "{" "}" "[<" ">]"]) @font-lock-bracket-face)
 
    :language 'c3
    :feature 'punctuation
@@ -517,7 +509,6 @@
 
      ((parent-is "compound_stmt") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "initializer_list") standalone-parent c3-ts-mode-indent-offset)
-     ((parent-is "expr_block") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "case_stmt") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "default_stmt") standalone-parent c3-ts-mode-indent-offset)
 
@@ -533,10 +524,6 @@
 
      ;; Trailing macro block
      ((match "compound_stmt" nil "trailing" nil nil) parent 0)
-
-     ;; Special rule: No indent for expr block (avoid double indented contents)
-     ((match "expr_block" "local_decl_after_type" nil nil nil) parent-bol 0)
-     ((match "expr_block" "assignment_expr" "right" nil nil) parent-bol 0)
 
      ((match nil "field_expr" "field" nil nil) parent-bol c3-ts-mode-indent-offset)
      ((n-p-gp "." "field_expr" nil) parent-bol c3-ts-mode-indent-offset) ;; Field access beginning with "."
