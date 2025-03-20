@@ -616,25 +616,31 @@
     (setq-local treesit-defun-type-regexp
                 (rx bos
                     (or "struct_declaration"
-                        "union_declaration"
                         "bitstruct_declaration"
                         "enum_declaration"
-                        "fault_declaration"
                         "interface_declaration"
                         "func_definition"
-                        "macro_declaration")
+                        "macro_declaration"
+                        "const_declaration"
+                        "alias_declaration"
+                        "typedef_declaration"
+                        "faultdef_declaration"
+                        "attrdef_declaration")
                     eos))
 
     ;; Imenu
     (setq-local treesit-simple-imenu-settings
                 `(("Struct" "\\`struct_declaration\\'" nil nil)
-                  ("Union" "\\`union_declaration\\'" nil nil)
                   ("Bitstruct" "\\`bitstruct_declaration\\'" nil nil)
                   ("Enum" "\\`enum_declaration\\'" nil nil)
-                  ("Fault" "\\`fault_declaration\\'" nil nil)
                   ("Interface" "\\`interface_declaration\\'" nil nil)
                   ("Function" "\\`func_definition\\'" nil nil)
-                  ("Macro" "\\`macro_declaration\\'" nil nil)))
+                  ("Macro" "\\`macro_declaration\\'" nil nil)
+                  ("Const" "\\`const_declaration\\'" nil nil)
+                  ("Alias" "\\`alias_declaration\\'" nil nil)
+                  ("Type" "\\`typedef_declaration\\'" nil nil)
+                  ("Fault" "\\`faultdef_declaration\\'" nil nil)
+                  ("Attribute" "\\`attrdef_declaration\\'" nil nil)))
 
     ;; Which-function
     (setq-local which-func-functions (treesit-defun-at-point))
