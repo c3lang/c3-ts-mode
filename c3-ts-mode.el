@@ -99,15 +99,15 @@
 
 (defvar c3-ts-mode--syntax-table
   (let ((table (make-syntax-table)))
-    ;; Taken from c-ts-mode.el
+    ;; Adapted from c-ts-mode.el
     (modify-syntax-entry ?_  "_"     table)
     (modify-syntax-entry ?\\ "\\"    table)
     (modify-syntax-entry ?+  "."     table)
     (modify-syntax-entry ?-  "."     table)
     (modify-syntax-entry ?=  "."     table)
     (modify-syntax-entry ?%  "."     table)
-    (modify-syntax-entry ?<  "."     table)
-    (modify-syntax-entry ?>  "."     table)
+    (modify-syntax-entry ?<  ". 1"   table) ; C3: the first character of a comment-start sequence
+    (modify-syntax-entry ?>  ". 4"   table) ; C3: the second character of a comment-end sequence
     (modify-syntax-entry ?&  "."     table)
     (modify-syntax-entry ?|  "."     table)
     (modify-syntax-entry ?\' "\""    table)
