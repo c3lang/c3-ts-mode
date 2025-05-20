@@ -209,13 +209,18 @@
     "associated"
     "elements"
     "extnameof"
+    "from_ordinal"
+    "get"
     "inf"
     "is_eq"
     "is_ordered"
     "is_substruct"
     "len"
+    "lookup"
+    "lookup_field"
     "max"
     "membersof"
+    "methodsof"
     "min"
     "nan"
     "inner"
@@ -223,12 +228,15 @@
     "names"
     "nameof"
     "params"
+    "paramsof"
     "parentof"
     "qnameof"
     "returns"
     "sizeof"
+    "tagof"
+    "has_tagof"
     "values"
-    ;; Extra token in grammar
+    ;; Separate token in c3c
     "typeid"))
 
 
@@ -359,7 +367,7 @@
 
    :language 'c3
    :feature 'type-property
-   `((type_access_expr (access_ident [(ident) "typeid"] @font-lock-constant-face (:match ,(rx-to-string `(: bos (or ,@c3-ts-mode--type-properties) eos)) @font-lock-constant-face))))
+   `((type_access_expr (access_ident (ident) @font-lock-constant-face (:match ,(rx-to-string `(: bos (or ,@c3-ts-mode--type-properties) eos)) @font-lock-constant-face))))
 
    :language 'c3
    :feature 'constant
