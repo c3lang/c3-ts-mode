@@ -382,7 +382,7 @@
    :language 'c3
    :feature 'module
    `((module_resolution (ident) ,c3-ts-mode-module-path-face)
-     (module (path_ident (ident) ,c3-ts-mode-module-path-face))
+     (module_declaration (path_ident (ident) ,c3-ts-mode-module-path-face))
      (import_declaration (path_ident (ident) ,c3-ts-mode-module-path-face)))
 
    :language 'c3
@@ -411,7 +411,9 @@
    :feature 'function
    '((call_expr function: [(ident) (at_ident)] @font-lock-function-call-face)
      (call_expr function: (module_ident_expr ident: (_) @font-lock-function-call-face))
+     (call_expr function: (trailing_generic_expr argument: [(ident) (at_ident)] @font-lock-function-call-face))
      (call_expr function: (trailing_generic_expr argument: (module_ident_expr ident: (_) @font-lock-function-call-face)))
+     ;; Method call
      (call_expr function: (field_expr field: (access_ident [(ident) (at_ident)] @font-lock-function-call-face))) ; NOTE Ambiguous, could be calling a method or function pointer
      ;; Method on type
      (call_expr function: (type_access_expr field: (access_ident [(ident) (at_ident)] @font-lock-function-call-face))))
@@ -452,13 +454,13 @@
    :feature 'variable
    '([(ident) (ct_ident)] @font-lock-variable-use-face
      ;; Parameter
-     (parameter name: (_) @font-lock-variable-name-face)
-     (call_invocation (call_arg name: (_) @font-lock-variable-name-face))
+     (param name: (_) @font-lock-variable-name-face)
+     (call_arg_list (call_arg name: (_) @font-lock-variable-name-face))
      (enum_param_declaration (ident) @font-lock-variable-name-face)
      ;; Declaration
-     (global_declaration (ident) @font-lock-variable-name-face)
-     (local_decl_after_type name: [(ident) (ct_ident)] @font-lock-variable-name-face)
-     (var_decl name: [(ident) (ct_ident)] @font-lock-variable-name-face)
+     (declaration (identifier_list [(ident) (ct_ident)] @font-lock-variable-name-face))
+     (declaration name: [(ident) (ct_ident)] @font-lock-variable-name-face)
+     (var_declaration name: [(ident) (ct_ident)] @font-lock-variable-name-face)
      (try_unwrap (ident) @font-lock-variable-name-face)
      (catch_unwrap (ident) @font-lock-variable-name-face))
 
@@ -508,7 +510,6 @@
 
      ;; Body/block children
      ((parent-is "enum_body") standalone-parent c3-ts-mode-indent-offset)
-     ((parent-is "fault_body") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "struct_body") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "bitstruct_body") standalone-parent c3-ts-mode-indent-offset)
      ((parent-is "interface_body") standalone-parent c3-ts-mode-indent-offset)
@@ -538,23 +539,22 @@
      ((match nil "type_access_expr" "field" nil nil) parent-bol c3-ts-mode-indent-offset)
      ((match nil "assignment_expr" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
      ((match nil "const_declaration" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
-     ((match nil "global_declaration" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
+     ((match nil "declaration" "right" nil nil) parent-bol c3-ts-mode-indent-offset)
 
      ;; Multi line declarations
      ((parent-is "identifier_list") parent 0)
-     ((parent-is "multi_declaration") grand-parent c3-ts-mode-indent-offset)
-     ((parent-is "local_decl_after_type") parent-bol c3-ts-mode-indent-offset)
-
-     ((parent-is "for_cond") parent 1)
-     ((parent-is "foreach_cond") parent 1)
+     ((parent-is "^for_cond") parent 1)
+     ((parent-is "^foreach_cond") parent 1)
+     ((parent-is "ct_for_cond") parent 0)
+     ((parent-is "ct_foreach_cond") parent 0)
      ((parent-is "paren_cond") parent 1)
      ((parent-is "catch_unwrap_list") parent 0)
      ((parent-is "comma_decl_or_expr") parent 0)
 
      ;; First parameter/argument
-     ((match "^\\(call_\\)?arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 1 1) parent-bol c3-ts-mode-indent-offset)
-     ;; Subsequent parameters/arguments
-     ((match "^\\(call_\\)?arg\\|parameter\\|enum_param_declaration\\|trailing_block_param\\|attr_param$" nil nil 2 nil) (nth-sibling 1) 0)
+     ((match "^\\(call_\\|attribute_\\)?arg\\|param\\|enum_param_declaration\\|trailing_block_param$" nil nil 1 1) parent-bol c3-ts-mode-indent-offset)
+     ;; Subsequent params/arguments
+     ((match "^\\(call_\\|attribute_\\)?arg\\|param\\|enum_param_declaration\\|trailing_block_param$" nil nil 2 nil) (nth-sibling 1) 0)
 
      ;; String/bytes literals
      ((node-is "raw_string_literal") no-indent)
