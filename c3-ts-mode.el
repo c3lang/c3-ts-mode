@@ -319,26 +319,19 @@
   ;; NOTE Earlier rules have precedence over later rules
   (treesit-font-lock-rules
    :language 'c3
+   :feature 'doc-comment
+   '((doc_comment_contract
+      name: (at_ident) @font-lock-builtin-face)
+     (doc_comment_contract
+      mutability_contract: (_) @font-lock-constant-face)
+     (["<*" "*>"] @font-lock-doc-face)
+     (doc_comment_text) @font-lock-doc-face)
+
+   :language 'c3
    :feature 'comment
    '((line_comment) @font-lock-comment-face
      (block_comment) @font-lock-comment-face
      (doc_comment) @font-lock-doc-face)
-
-   :language 'c3
-   :feature 'doc-comment
-   :override 'append
-   `((doc_comment_contract name: (at_ident) @bold
-      (:match ,(rx
-                bos
-                "@"
-                (or
-                 "param"
-                 "return"
-                 "deprecated"
-                 "require"
-                 "ensure"
-                 "pure")
-                eos) @bold)))
 
    :language 'c3
    :feature 'literal
