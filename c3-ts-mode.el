@@ -327,7 +327,7 @@
    :language 'c3
    :feature 'doc-comment
    :override 'append
-   `((doc_comment_contract (at_ident) @bold
+   `((doc_comment_contract name: (at_ident) @bold
       (:match ,(rx
                 bos
                 "@"
@@ -363,7 +363,7 @@
 
    :language 'c3
    :feature 'builtin
-   '((builtin) @font-lock-builtin-face)
+   '([(builtin) (builtin_const)] @font-lock-builtin-face)
 
    :language 'c3
    :feature 'type-property
@@ -387,8 +387,8 @@
 
    :language 'c3
    :feature 'attribute
-   '((attribute name: (_) @font-lock-builtin-face)
-     (attrdef_declaration name: (_) @font-lock-builtin-face)
+   '((attribute name: (at_ident) @font-lock-builtin-face)
+     (at_type_ident) @font-lock-builtin-face
      (call_inline_attributes (at_ident) @font-lock-builtin-face))
 
    :language 'c3
@@ -409,10 +409,8 @@
 
    :language 'c3
    :feature 'function
-   '((call_expr function: [(ident) (at_ident)] @font-lock-function-call-face)
-     (call_expr function: (module_ident_expr ident: (_) @font-lock-function-call-face))
-     (call_expr function: (trailing_generic_expr argument: [(ident) (at_ident)] @font-lock-function-call-face))
-     (call_expr function: (trailing_generic_expr argument: (module_ident_expr ident: (_) @font-lock-function-call-face)))
+   '((call_expr function: (ident_expr [(ident) (at_ident)] @font-lock-function-call-face))
+     (call_expr function: (trailing_generic_expr argument: (ident_expr [(ident) (at_ident)] @font-lock-function-call-face)))
      ;; Method call
      (call_expr function: (field_expr field: (access_ident [(ident) (at_ident)] @font-lock-function-call-face))) ; NOTE Ambiguous, could be calling a method or function pointer
      ;; Method on type
@@ -420,20 +418,17 @@
 
    :language 'c3
    :feature 'assignment
-   `((assignment_expr left: (ident) ,c3-ts-mode-assignment-face)
-     (assignment_expr left: (module_ident_expr (ident) ,c3-ts-mode-assignment-face))
+   `((assignment_expr left: (ident_expr (ident) ,c3-ts-mode-assignment-face))
      (assignment_expr left: (field_expr field: (_) ,c3-ts-mode-assignment-face))
      (assignment_expr left: (unary_expr operator: "*" ,c3-ts-mode-assignment-face))
      (assignment_expr left: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face))
 
-     (update_expr argument: (ident) ,c3-ts-mode-assignment-face)
-     (update_expr argument: (module_ident_expr ident: (ident) ,c3-ts-mode-assignment-face))
+     (update_expr argument: (ident_expr (ident) ,c3-ts-mode-assignment-face))
      (update_expr argument: (field_expr field: (_) ,c3-ts-mode-assignment-face))
      (update_expr argument: (unary_expr operator: "*" ,c3-ts-mode-assignment-face))
      (update_expr argument: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face))
 
-     (unary_expr operator: ["--" "++"] argument: (ident) ,c3-ts-mode-assignment-face)
-     (unary_expr operator: ["--" "++"] argument: (module_ident_expr (ident) ,c3-ts-mode-assignment-face))
+     (unary_expr operator: ["--" "++"] argument: (ident_expr (ident) ,c3-ts-mode-assignment-face))
      (unary_expr operator: ["--" "++"] argument: (field_expr field: (access_ident (ident)) ,c3-ts-mode-assignment-face))
      (unary_expr operator: ["--" "++"] argument: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face)))
 
@@ -448,15 +443,16 @@
      (struct_member_declaration (ident) @font-lock-property-name-face)
      (struct_member_declaration (identifier_list (ident) @font-lock-property-name-face))
      (bitstruct_member_declaration (ident) @font-lock-property-name-face)
-     (initializer_list (arg (param_path (param_path_element (ident) @font-lock-property-name-face)))))
+     (initializer_list (initializer_element (param_path (param_path_element (access_ident (ident) @font-lock-property-name-face))))))
 
    :language 'c3
    :feature 'variable
    '([(ident) (ct_ident)] @font-lock-variable-use-face
      ;; Parameter
      (param name: (_) @font-lock-variable-name-face)
+     (trailing_block_param (at_ident) @font-lock-variable-name-face)
      (call_arg_list (call_arg name: (_) @font-lock-variable-name-face))
-     (enum_param_declaration (ident) @font-lock-variable-name-face)
+     (enum_param (ident) @font-lock-variable-name-face)
      ;; Declaration
      (declaration (identifier_list [(ident) (ct_ident)] @font-lock-variable-name-face))
      (declaration name: [(ident) (ct_ident)] @font-lock-variable-name-face)

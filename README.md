@@ -83,7 +83,7 @@ Here is an example how to override highlighting of the "assert" keyword and argu
                      ;; This will highlight the "assert" keyword and argument names with custom faces
                      ;; See "37.5 Pattern Matching Tree-sitter Nodes" in the Emacs manual
                      '((assert_stmt "assert" @assert-face)
-                       (call_invocation (call_arg name: (_) @named-arg-face)))
+                       (call_arg_list (call_arg name: (_) @named-arg-face)))
                      )) t)
 
   ;; Add feature 'custom' to feature level 4
