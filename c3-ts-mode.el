@@ -108,6 +108,7 @@
     (modify-syntax-entry ?%  "."     table)
     (modify-syntax-entry ?<  ". 1"   table) ; C3: the first character of a comment-start sequence
     (modify-syntax-entry ?>  ". 4"   table) ; C3: the second character of a comment-end sequence
+    (modify-syntax-entry ?@  "w"     table) ; C3: identifiers starting with @
     (modify-syntax-entry ?&  "."     table)
     (modify-syntax-entry ?|  "."     table)
     (modify-syntax-entry ?\' "\""    table)
