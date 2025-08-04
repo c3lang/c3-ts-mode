@@ -234,6 +234,7 @@
     "qnameof"
     "returns"
     "sizeof"
+    "set"
     "tagof"
     "has_tagof"
     "values"
