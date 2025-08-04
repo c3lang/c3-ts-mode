@@ -322,12 +322,14 @@
   (treesit-font-lock-rules
    :language 'c3
    :feature 'doc-comment
-   '((doc_comment_contract
-      name: (at_ident) @font-lock-builtin-face)
-     (doc_comment_contract
-      mutability_contract: (_) @font-lock-constant-face)
-     (["<*" "*>"] @font-lock-doc-face)
-     (doc_comment_text) @font-lock-doc-face)
+   '((doc_comment_contract name: (at_ident) @font-lock-builtin-face)
+     (doc_comment_contract mutability_contract: (_) @font-lock-constant-face)
+     (doc_comment ["<*" "*>"] @font-lock-doc-face)
+     (doc_comment_text) @font-lock-doc-face
+     ;; (doc_comment_contract parameter: ([(ident) (ct_ident) (hash_ident)]) @font-lock-variable-name-face)
+     (doc_comment_contract [":" "?"] @font-lock-doc-face)
+     (doc_comment_contract description: (_) @font-lock-doc-face)
+     )
 
    :language 'c3
    :feature 'comment
