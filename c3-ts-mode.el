@@ -189,6 +189,7 @@
     "$if"
     "$include"
     "$is_const"
+    "$kindof"
     "$nameof"
     "$offsetof"
     "$qnameof"
@@ -299,7 +300,12 @@
     ">>"
     "..."
     "<<="
-    ">>="))
+    ">>="
+    "&&&"
+    "+++"
+    "|||"
+    "???"
+    "+++="))
 
 (defvar c3-ts-mode--feature-list
   `((comment definition)
