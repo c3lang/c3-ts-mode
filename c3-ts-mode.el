@@ -425,6 +425,7 @@
      (assignment_expr left: (field_expr field: (_) ,c3-ts-mode-assignment-face))
      (assignment_expr left: (unary_expr operator: "*" ,c3-ts-mode-assignment-face))
      (assignment_expr left: (subscript_expr ["[" "]"] ,c3-ts-mode-assignment-face))
+     (assignment_expr left: (maybe_deref_expr ["[" "]"] ,c3-ts-mode-assignment-face))
 
      (update_expr argument: (ident_expr (ident) ,c3-ts-mode-assignment-face))
      (update_expr argument: (field_expr field: (_) ,c3-ts-mode-assignment-face))
