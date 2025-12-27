@@ -656,9 +656,7 @@
     (treesit-major-mode-setup)))
 
 (when (treesit-ready-p 'c3)
-  (add-to-list 'auto-mode-alist '("\\.c3\\'" . c3-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.c3i\\'" . c3-ts-mode))
-  (add-to-list 'auto-mode-alist '("\\.c3t\\'" . c3-ts-mode)))
+  (add-to-list 'auto-mode-alist '("\\.c3[it]?\\'" . c3-ts-mode)))
 
 (eval-after-load 'compile
   (lambda()
