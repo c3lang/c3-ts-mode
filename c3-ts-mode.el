@@ -386,13 +386,14 @@
    :feature 'module
    `((module_resolution (ident) ,c3-ts-mode-module-path-face)
      (module_declaration (path_ident (ident) ,c3-ts-mode-module-path-face))
-     (import_declaration (path_ident (ident) ,c3-ts-mode-module-path-face)))
+     (import_path (path_ident (ident) ,c3-ts-mode-module-path-face)))
 
    :language 'c3
    :feature 'attribute
    '((attribute name: (at_ident) @font-lock-builtin-face)
      (at_type_ident) @font-lock-builtin-face
-     (call_inline_attributes (at_ident) @font-lock-builtin-face))
+     (call_inline_attributes (at_ident) @font-lock-builtin-face)
+     (type_suffix (at_ident) @font-lock-builtin-face))
 
    :language 'c3
    :feature 'type
