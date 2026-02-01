@@ -590,8 +590,18 @@
     (treesit-node-text
      (treesit-node-child-by-field-name
       (pcase (treesit-node-type node)
-        ("func_definition" (treesit-node-child node 1))
-        ("macro_declaration" (treesit-node-child node 1))
+        ("func_definition"
+         (car
+          (treesit-filter-child node
+                                (lambda (ch)
+                                  (string-equal (treesit-node-type ch) "func_header"))
+                                t)))
+        ("macro_declaration"
+         (car
+          (treesit-filter-child node
+                                (lambda (ch)
+                                  (string-equal (treesit-node-type ch) "macro_header"))
+                                t)))
         (_ node))
       "name")
      t)))
