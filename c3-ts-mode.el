@@ -131,6 +131,7 @@
     "break"
     "case"
     "catch"
+    "constdef"
     "const"
     "continue"
     "default"
@@ -149,6 +150,7 @@
     "if"
     "inline"
     "import"
+    "lengthof"
     "macro"
     "module"
     "nextcase"
@@ -165,9 +167,7 @@
     "var"
     "while"
 
-    "$alignof"
     "$assert"
-    "$assignable"
     "$case"
     "$default"
     "$defined"
@@ -179,69 +179,20 @@
     "$endif"
     "$endswitch"
     "$eval"
-    "$evaltype"
     "$error"
     "$exec"
-    "$extnameof"
+    "$expand"
     "$feature"
     "$for"
     "$foreach"
     "$if"
     "$include"
-    "$is_const"
-    "$kindof"
-    "$nameof"
-    "$offsetof"
-    "$qnameof"
-    "$sizeof"
+    "$reflect"
     "$stringify"
     "$switch"
-    "$typefrom"
-    "$typeof"
-    "$vacount"
-    "$vatype"
-    "$vaconst"
-    "$vaarg"
-    "$vaexpr"
-    "$vasplat"))
-
-(defvar c3-ts-mode--type-properties
-  ;; From "c3c --list-type-properties"
-  '("alignof"
-    "associated"
-    "elements"
-    "extnameof"
-    "from_ordinal"
-    "get"
-    "inf"
-    "is_eq"
-    "is_ordered"
-    "is_substruct"
-    "len"
-    "lookup"
-    "lookup_field"
-    "max"
-    "membersof"
-    "methodsof"
-    "min"
-    "nan"
-    "inner"
-    "kindof"
-    "names"
-    "nameof"
-    "params"
-    "paramsof"
-    "parentof"
-    "qnameof"
-    "returns"
-    "sizeof"
-    "set"
-    "tagof"
-    "has_tagof"
-    "values"
-    ;; Separate token in c3c
-    "typeid"))
-
+    "$Typefrom"
+    "$Typeof"
+    "$vaarg"))
 
 (defvar c3-ts-mode--operators
   ;; From "c3c --list-operators"
@@ -370,7 +321,7 @@
 
    :language 'c3
    :feature 'type-property
-   `((type_access_expr (access_ident (ident) @font-lock-constant-face (:match ,(rx-to-string `(: bos (or ,@c3-ts-mode--type-properties) eos)) @font-lock-constant-face))))
+   `((type_access_expr (access_ident (ident) @font-lock-constant-face)))
 
    :language 'c3
    :feature 'constant
