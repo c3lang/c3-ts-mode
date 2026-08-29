@@ -288,7 +288,7 @@
    :feature 'doc-comment
    '((doc_comment_contract name: (at_ident) @font-lock-builtin-face)
      (doc_comment_contract modifier: (_) @font-lock-constant-face)
-     (doc_comment_contract (doc_comment_require_parameter) @font-lock-constant-face)
+     (doc_comment_contract (doc_comment_require_parameter) @font-lock-doc-face)
      (doc_comment ["<*" "*>"] @font-lock-doc-face)
      (doc_comment_text) @font-lock-doc-face
      ;; (doc_comment_contract parameter: ([(ident) (ct_ident) (hash_ident)]) @font-lock-variable-name-face)
