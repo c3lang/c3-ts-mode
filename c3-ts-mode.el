@@ -127,21 +127,26 @@
     "assert"
     "asm"
     "attrdef"
+    "attrmacro"
     "bitstruct"
     "break"
     "case"
     "catch"
     "constdef"
     "const"
+    "constset"
+    "cenum"
     "continue"
     "default"
     "defer"
     "do"
     "else"
     "enum"
+    "excuse"
     "extern"
     ;; "false" ;; NOTE Treated as constant
     "faultdef"
+    "faultset"
     "for"
     "foreach"
     "foreach_r"
@@ -163,6 +168,7 @@
     ;; "true" ;; NOTE Treated as constant
     "try"
     "typedef"
+    "distinct"
     "union"
     "var"
     "while"
@@ -182,6 +188,7 @@
     "$error"
     "$exec"
     "$expand"
+    "$feat"
     "$feature"
     "$for"
     "$foreach"
@@ -280,7 +287,8 @@
    :language 'c3
    :feature 'doc-comment
    '((doc_comment_contract name: (at_ident) @font-lock-builtin-face)
-     (doc_comment_contract mutability_contract: (_) @font-lock-constant-face)
+     (doc_comment_contract modifier: (_) @font-lock-constant-face)
+     (doc_comment_contract (doc_comment_require_parameter) @font-lock-constant-face)
      (doc_comment ["<*" "*>"] @font-lock-doc-face)
      (doc_comment_text) @font-lock-doc-face
      ;; (doc_comment_contract parameter: ([(ident) (ct_ident) (hash_ident)]) @font-lock-variable-name-face)
